@@ -1,0 +1,2923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ETA Neural Delivery</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   CORE
+========================================================= */
+
+:root {
+    --bg: #05080d;
+    --card: #0c1119;
+    --card2: #101722;
+    --border: #1d2938;
+
+    --text: #edf4ff;
+    --muted: #728196;
+
+    --cyan: #42e8ff;
+    --blue: #458cff;
+    --green: #4dffc3;
+    --yellow: #ffc84a;
+    --red: #ff665c;
+
+    --glow-cyan: rgba(66,232,255,.25);
+    --glow-green: rgba(77,255,195,.25);
+    --glow-blue: rgba(69,140,255,.25);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(66,232,255,.07),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(69,140,255,.08),
+            transparent 35%
+        ),
+        var(--bg);
+
+    color: var(--text);
+
+    font-family: 'Space Grotesk', sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND GRID
+========================================================= */
+
+.background-grid {
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            rgba(49,69,91,.13) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(49,69,91,.13) 1px,
+            transparent 1px
+        );
+
+    background-size: 45px 45px;
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            black 0%,
+            rgba(0,0,0,.6) 65%,
+            transparent 100%
+        );
+
+    animation: gridScroll 18s linear infinite;
+
+    z-index: -5;
+}
+
+@keyframes gridScroll {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(45px);
+    }
+}
+
+
+/* =========================================================
+   FLOATING DATA PARTICLES
+========================================================= */
+
+.particle {
+    position: fixed;
+
+    width: 3px;
+    height: 3px;
+
+    border-radius: 50%;
+
+    background: var(--cyan);
+
+    box-shadow:
+        0 0 12px var(--cyan);
+
+    pointer-events: none;
+
+    opacity: .35;
+
+    animation: floatParticle linear infinite;
+}
+
+.p1 {
+    left: 8%;
+    top: 20%;
+    animation-duration: 9s;
+}
+
+.p2 {
+    left: 21%;
+    top: 70%;
+    animation-duration: 12s;
+}
+
+.p3 {
+    left: 45%;
+    top: 12%;
+    animation-duration: 8s;
+}
+
+.p4 {
+    left: 71%;
+    top: 30%;
+    animation-duration: 11s;
+}
+
+.p5 {
+    left: 91%;
+    top: 65%;
+    animation-duration: 10s;
+}
+
+@keyframes floatParticle {
+
+    0% {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: .5;
+    }
+
+    80% {
+        opacity: .5;
+    }
+
+    100% {
+        transform: translateY(-160px);
+        opacity: 0;
+    }
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+    width: min(1380px, calc(100% - 40px));
+
+    margin: auto;
+
+    padding: 25px 0 60px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+    height: 70px;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 1px solid var(--border);
+
+    margin-bottom: 25px;
+}
+
+.logo-area {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+.logo {
+    width: 43px;
+    height: 43px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(66,232,255,.2),
+            rgba(69,140,255,.12)
+        );
+
+    border: 1px solid rgba(66,232,255,.35);
+
+    color: var(--cyan);
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 12px;
+
+    box-shadow:
+        0 0 25px rgba(66,232,255,.08);
+}
+
+.title h1 {
+    margin: 0;
+
+    font-size: 21px;
+
+    font-weight: 600;
+}
+
+.title p {
+    margin: 4px 0 0;
+
+    color: var(--muted);
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 10px;
+
+    letter-spacing: .08em;
+}
+
+.system {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    color: var(--green);
+
+    font-size: 10px;
+
+    letter-spacing: .1em;
+}
+
+.system-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 0 0 rgba(77,255,195,.5);
+
+    animation: systemPulse 1.7s infinite;
+}
+
+@keyframes systemPulse {
+
+    70% {
+        box-shadow:
+            0 0 0 8px rgba(77,255,195,0);
+    }
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.main {
+    display: grid;
+
+    grid-template-columns:
+        minmax(390px, .9fr)
+        minmax(500px, 1.1fr);
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card {
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16,23,34,.94),
+            rgba(7,11,17,.96)
+        );
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.35);
+
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(66,232,255,.35),
+            transparent
+        );
+}
+
+
+/* =========================================================
+   FORM PANEL
+========================================================= */
+
+.form-panel {
+    padding: 27px;
+}
+
+.panel-heading {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.panel-title {
+    font-family: 'JetBrains Mono', monospace;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    letter-spacing: .15em;
+
+    text-transform: uppercase;
+}
+
+.panel-number {
+    color: #34465b;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   FIELD
+========================================================= */
+
+.field {
+    position: relative;
+
+    margin-bottom: 15px;
+
+    transition:
+        transform .25s ease;
+}
+
+.field.active {
+    transform: translateX(3px);
+}
+
+.field label {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    color: #7e8da2;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 10px;
+
+    letter-spacing: .05em;
+
+    transition:
+        color .25s ease;
+}
+
+.field.active label {
+    color: var(--cyan);
+}
+
+.field label span {
+    opacity: .4;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-wrap::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 2px;
+
+    background: transparent;
+
+    border-radius: 3px;
+
+    transition:
+        background .3s ease,
+        box-shadow .3s ease;
+}
+
+.field.active .input-wrap::before {
+    background: var(--cyan);
+
+    box-shadow:
+        0 0 14px var(--cyan);
+}
+
+input,
+select {
+    width: 100%;
+
+    height: 43px;
+
+    padding: 0 13px;
+
+    color: var(--text);
+
+    background:
+        rgba(3,7,12,.8);
+
+    border: 1px solid #202d3d;
+
+    border-radius: 8px;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 12px;
+
+    transition:
+        border .25s ease,
+        background .25s ease,
+        box-shadow .25s ease,
+        transform .2s ease;
+}
+
+input:hover,
+select:hover {
+    border-color: #33445a;
+
+    background:
+        rgba(5,10,17,.95);
+}
+
+input:focus,
+select:focus {
+    outline: none;
+
+    border-color: var(--cyan);
+
+    background:
+        rgba(7,15,23,.95);
+
+    box-shadow:
+        0 0 0 3px rgba(66,232,255,.06),
+        0 0 25px rgba(66,232,255,.05);
+
+    transform: scale(1.005);
+}
+
+input[type="datetime-local"] {
+    cursor: pointer;
+
+    color-scheme: dark;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+
+    filter:
+        invert(1)
+        sepia(1)
+        saturate(2)
+        hue-rotate(155deg);
+
+    opacity: .75;
+
+    transition:
+        transform .2s ease;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+    transform: scale(1.2);
+}
+
+
+/* =========================================================
+   TWO COLUMN FIELDS
+========================================================= */
+
+.row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 13px;
+}
+
+
+/* =========================================================
+   REACTION TEXT
+========================================================= */
+
+.reaction {
+    height: 14px;
+
+    margin-top: 4px;
+
+    color: var(--cyan);
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 8px;
+
+    opacity: 0;
+
+    transform: translateY(-3px);
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
+}
+
+.field.active .reaction {
+    opacity: .7;
+
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.predict-button {
+    position: relative;
+
+    width: 100%;
+
+    height: 51px;
+
+    margin-top: 8px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    color: #031013;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: .1em;
+
+    background:
+        linear-gradient(
+            100deg,
+            var(--cyan),
+            #7bf5ff,
+            var(--cyan)
+        );
+
+    background-size: 200%;
+
+    box-shadow:
+        0 12px 35px rgba(66,232,255,.13);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.predict-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 16px 40px rgba(66,232,255,.22);
+
+    animation:
+        buttonGradient 1.5s linear infinite;
+}
+
+@keyframes buttonGradient {
+
+    to {
+        background-position: 200%;
+    }
+}
+
+.predict-button:active {
+    transform: scale(.985);
+}
+
+
+/* =========================================================
+   CALCULATING BUTTON
+========================================================= */
+
+body.calculating .predict-button {
+
+    background:
+        linear-gradient(
+            90deg,
+            #183b43,
+            #42e8ff,
+            #183b43
+        );
+
+    background-size: 200%;
+
+    color: #bff9ff;
+
+    animation:
+        calculatingButton 1s linear infinite;
+
+    box-shadow:
+        0 0 30px rgba(66,232,255,.2);
+}
+
+@keyframes calculatingButton {
+
+    to {
+        background-position: 200%;
+    }
+}
+
+
+/* =========================================================
+   RIGHT SIDE COMMAND CENTER
+========================================================= */
+
+.command-panel {
+    min-height: 700px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    padding: 27px;
+}
+
+
+/* =========================================================
+   COMMAND TOP
+========================================================= */
+
+.command-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.command-title {
+    color: var(--muted);
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 11px;
+
+    letter-spacing: .15em;
+
+    text-transform: uppercase;
+}
+
+.ai-mode {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--green);
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 9px;
+}
+
+.ai-mode span {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    animation: aiBlink 1s infinite;
+}
+
+@keyframes aiBlink {
+
+    50% {
+        opacity: .2;
+    }
+}
+
+
+/* =========================================================
+   AI ROBOT AREA
+========================================================= */
+
+.ai-area {
+    position: relative;
+
+    min-height: 270px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* scanner */
+
+.scanner {
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(66,232,255,.09);
+
+    box-shadow:
+        inset 0 0 60px rgba(66,232,255,.025);
+
+    animation:
+        scannerRotate 15s linear infinite;
+}
+
+.scanner::before {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 50%;
+    height: 1px;
+
+    transform-origin: left center;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--cyan),
+            transparent
+        );
+
+    box-shadow:
+        0 0 15px var(--cyan);
+}
+
+@keyframes scannerRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   ROBOT
+========================================================= */
+
+.robot {
+    position: relative;
+
+    width: 135px;
+    height: 145px;
+
+    animation:
+        robotFloat 2.7s ease-in-out infinite;
+}
+
+@keyframes robotFloat {
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+
+/* robot glow */
+
+.robot-glow {
+    position: absolute;
+
+    inset: 20px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(66,232,255,.18),
+            transparent 70%
+        );
+
+    filter: blur(12px);
+}
+
+
+/* head */
+
+.robot-head {
+    position: absolute;
+
+    width: 88px;
+    height: 68px;
+
+    left: 24px;
+    top: 18px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1b2938,
+            #091018
+        );
+
+    border: 1px solid #314255;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.5),
+        inset 0 0 25px rgba(66,232,255,.04);
+
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+
+/* calculating robot */
+
+body.calculating .robot-head {
+
+    border-color:
+        rgba(255,200,74,.7);
+
+    box-shadow:
+        0 0 35px rgba(255,200,74,.15),
+        inset 0 0 30px rgba(255,200,74,.05);
+}
+
+
+/* ear */
+
+.robot-ear {
+    position: absolute;
+
+    width: 10px;
+    height: 25px;
+
+    top: 39px;
+
+    border-radius: 5px;
+
+    background: #172433;
+
+    border: 1px solid #34465a;
+}
+
+.robot-ear.left {
+    left: 14px;
+}
+
+.robot-ear.right {
+    right: 14px;
+}
+
+
+/* face screen */
+
+.robot-face {
+    position: absolute;
+
+    left: 10px;
+    right: 10px;
+
+    top: 11px;
+    bottom: 11px;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #07131c,
+            #0a1b25
+        );
+
+    border: 1px solid rgba(66,232,255,.16);
+
+    overflow: hidden;
+}
+
+
+/* eyes */
+
+.eye {
+    position: absolute;
+
+    top: 22px;
+
+    width: 13px;
+    height: 9px;
+
+    border-radius: 7px;
+
+    background: var(--cyan);
+
+    box-shadow:
+        0 0 14px var(--cyan);
+
+    animation:
+        eyeBlink 4s infinite;
+
+    transition:
+        background .3s ease,
+        box-shadow .3s ease;
+}
+
+.eye.left {
+    left: 20px;
+}
+
+.eye.right {
+    right: 20px;
+}
+
+@keyframes eyeBlink {
+
+    0%, 46%, 50%, 100% {
+        transform: scaleY(1);
+    }
+
+    48% {
+        transform: scaleY(.1);
+    }
+}
+
+
+/* calculating eyes */
+
+body.calculating .eye {
+
+    background: var(--yellow);
+
+    box-shadow:
+        0 0 16px var(--yellow);
+
+    animation:
+        thinkingEyes .5s infinite alternate;
+}
+
+@keyframes thinkingEyes {
+
+    from {
+        transform: scaleY(.6);
+    }
+
+    to {
+        transform: scaleY(1.2);
+    }
+}
+
+
+/* thinking dots */
+
+.thinking-dots {
+    position: absolute;
+
+    bottom: 12px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    display: flex;
+
+    gap: 5px;
+}
+
+.thinking-dots i {
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: var(--cyan);
+
+    animation:
+        thinking 1.2s infinite;
+}
+
+.thinking-dots i:nth-child(2) {
+    animation-delay: .15s;
+}
+
+.thinking-dots i:nth-child(3) {
+    animation-delay: .3s;
+}
+
+@keyframes thinking {
+
+    0%, 60%, 100% {
+        transform: translateY(0);
+
+        opacity: .25;
+    }
+
+    30% {
+        transform: translateY(-5px);
+
+        opacity: 1;
+    }
+}
+
+
+/* body */
+
+.robot-body {
+    position: absolute;
+
+    width: 105px;
+    height: 60px;
+
+    left: 15px;
+    bottom: 0;
+
+    border-radius: 28px 28px 15px 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #192a3a,
+            #081018
+        );
+
+    border: 1px solid #2b3d50;
+}
+
+
+/* chest core */
+
+.robot-core {
+    position: absolute;
+
+    left: 50%;
+    top: 15px;
+
+    transform: translateX(-50%);
+
+    width: 23px;
+    height: 23px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(66,232,255,.4);
+
+    background:
+        rgba(66,232,255,.1);
+
+    box-shadow:
+        0 0 20px rgba(66,232,255,.25);
+
+    animation:
+        corePulse 1.4s infinite;
+
+    transition:
+        border-color .3s ease,
+        background .3s ease;
+}
+
+@keyframes corePulse {
+
+    50% {
+        box-shadow:
+            0 0 30px rgba(66,232,255,.6);
+
+        transform:
+            translateX(-50%)
+            scale(1.08);
+    }
+}
+
+body.calculating .robot-core {
+
+    border-color: var(--yellow);
+
+    background:
+        rgba(255,200,74,.15);
+
+    box-shadow:
+        0 0 35px rgba(255,200,74,.65);
+
+    animation:
+        calculatingCore .55s infinite alternate;
+}
+
+@keyframes calculatingCore {
+
+    from {
+        transform:
+            translateX(-50%)
+            scale(.9);
+    }
+
+    to {
+        transform:
+            translateX(-50%)
+            scale(1.2);
+    }
+}
+
+
+/* =========================================================
+   AI STATUS TEXT
+========================================================= */
+
+.ai-thinking {
+    text-align: center;
+
+    margin-top: -15px;
+}
+
+.ai-state {
+    color: var(--cyan);
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 11px;
+
+    letter-spacing: .1em;
+
+    text-transform: uppercase;
+
+    transition:
+        color .3s ease;
+}
+
+body.calculating .ai-state {
+    color: var(--yellow);
+}
+
+.ai-description {
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 9px;
+
+    line-height: 1.7;
+
+    min-height: 31px;
+}
+
+
+/* =========================================================
+   DELIVERY MAP
+========================================================= */
+
+.map {
+    position: relative;
+
+    height: 185px;
+
+    margin-top: 25px;
+
+    border-radius: 13px;
+
+    overflow: hidden;
+
+    border: 1px solid #1c2938;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(15,27,39,.95),
+            rgba(5,10,16,.98)
+        );
+}
+
+
+/* map grid */
+
+.map::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(70,103,133,.09) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(70,103,133,.09) 1px,
+            transparent 1px
+        );
+
+    background-size: 30px 30px;
+}
+
+
+/* map scan */
+
+.map::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: -20%;
+
+    width: 20%;
+
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(66,232,255,.06),
+            transparent
+        );
+
+    animation:
+        mapScan 4s linear infinite;
+
+    pointer-events: none;
+}
+
+@keyframes mapScan {
+
+    to {
+        left: 120%;
+    }
+}
+
+
+/* roads */
+
+.road1,
+.road2,
+.road3 {
+    position: absolute;
+
+    height: 1px;
+
+    background:
+        rgba(77,109,137,.16);
+
+    transform-origin: left;
+}
+
+.road1 {
+    width: 80%;
+
+    left: 5%;
+    top: 35%;
+
+    transform: rotate(15deg);
+}
+
+.road2 {
+    width: 75%;
+
+    left: 20%;
+    top: 75%;
+
+    transform: rotate(-13deg);
+}
+
+.road3 {
+    width: 65%;
+
+    left: 10%;
+    top: 60%;
+
+    transform: rotate(-30deg);
+}
+
+
+/* route */
+
+.route {
+    position: absolute;
+
+    left: 10%;
+    right: 10%;
+
+    top: 50%;
+
+    height: 3px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            var(--green) 0,
+            var(--green) 10px,
+            transparent 10px,
+            transparent 20px
+        );
+
+    filter:
+        drop-shadow(0 0 5px rgba(77,255,195,.5));
+
+    animation:
+        routeFlow .8s linear infinite;
+}
+
+@keyframes routeFlow {
+
+    to {
+        background-position: -20px;
+    }
+}
+
+
+/* route points */
+
+.map-point {
+    position: absolute;
+
+    width: 12px;
+    height: 12px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    border: 3px solid #091019;
+
+    box-shadow:
+        0 0 15px rgba(77,255,195,.7);
+
+    z-index: 2;
+}
+
+.map-point.start {
+    left: 8%;
+    top: calc(50% - 6px);
+}
+
+.map-point.end {
+    right: 8%;
+    top: calc(50% - 6px);
+
+    animation:
+        destinationPulse 1.4s infinite;
+}
+
+@keyframes destinationPulse {
+
+    50% {
+        transform: scale(1.4);
+
+        box-shadow:
+            0 0 0 8px rgba(77,255,195,.05),
+            0 0 25px rgba(77,255,195,.8);
+    }
+}
+
+
+/* =========================================================
+   DELIVERY CAR
+========================================================= */
+
+.delivery-car {
+    position: absolute;
+
+    width: 44px;
+    height: 22px;
+
+    left: 10%;
+
+    top: calc(50% - 20px);
+
+    z-index: 4;
+
+    animation:
+        deliveryMove 5s ease-in-out infinite;
+}
+
+@keyframes deliveryMove {
+
+    0% {
+        left: 10%;
+    }
+
+    45% {
+        left: 55%;
+    }
+
+    100% {
+        left: 82%;
+    }
+}
+
+.car-body {
+    position: absolute;
+
+    bottom: 3px;
+
+    left: 0;
+
+    width: 32px;
+    height: 15px;
+
+    border-radius: 4px 2px 2px 4px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #55f2c0,
+            #1cae80
+        );
+
+    box-shadow:
+        0 0 14px rgba(77,255,195,.25);
+}
+
+.car-cabin {
+    position: absolute;
+
+    right: 0;
+    bottom: 3px;
+
+    width: 17px;
+    height: 13px;
+
+    border-radius: 2px;
+
+    background: #31c99a;
+
+    clip-path:
+        polygon(
+            0 30%,
+            25% 0,
+            100% 0,
+            100% 100%,
+            0 100%
+        );
+}
+
+.car-window {
+    position: absolute;
+
+    right: 3px;
+    top: 3px;
+
+    width: 8px;
+    height: 5px;
+
+    background: #09212a;
+
+    border-radius: 1px;
+}
+
+.car-wheel {
+    position: absolute;
+
+    bottom: 0;
+
+    width: 7px;
+    height: 7px;
+
+    background: #02060a;
+
+    border: 1px solid #73818d;
+
+    border-radius: 50%;
+}
+
+.car-wheel.one {
+    left: 5px;
+}
+
+.car-wheel.two {
+    right: 5px;
+}
+
+
+/* =========================================================
+   ETA RESULT
+========================================================= */
+
+.eta-result {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        scale(.7);
+
+    text-align: center;
+
+    z-index: 6;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity .6s ease,
+        transform .6s cubic-bezier(.2,.8,.2,1);
+}
+
+.eta-result.visible {
+
+    opacity: 1;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+}
+
+.eta-number {
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 64px;
+
+    line-height: 1;
+
+    font-weight: 700;
+
+    color: var(--green);
+
+    text-shadow:
+        0 0 30px rgba(77,255,195,.25);
+}
+
+.eta-minutes {
+
+    margin-top: 7px;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 9px;
+
+    letter-spacing: .2em;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+.metrics {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 8px;
+
+    margin-top: 12px;
+}
+
+.metric {
+
+    padding: 11px;
+
+    border-radius: 8px;
+
+    border: 1px solid #1b2736;
+
+    background:
+        rgba(4,8,13,.55);
+
+    text-align: center;
+
+    transition:
+        border-color .3s ease,
+        background .3s ease,
+        transform .2s ease;
+}
+
+.metric:hover {
+
+    border-color:
+        rgba(66,232,255,.35);
+
+    background:
+        rgba(66,232,255,.04);
+
+    transform:
+        translateY(-2px);
+}
+
+.metric-label {
+
+    display: block;
+
+    color: #56677b;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 8px;
+
+    margin-bottom: 5px;
+
+    text-transform: uppercase;
+}
+
+.metric-value {
+
+    color: var(--text);
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error {
+
+    width: 100%;
+
+    padding: 12px;
+
+    margin-bottom: 10px;
+
+    border-radius: 8px;
+
+    color: var(--red);
+
+    background:
+        rgba(255,102,92,.06);
+
+    border:
+        1px solid rgba(255,102,92,.25);
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 10px;
+
+    animation:
+        errorShake .4s ease;
+}
+
+@keyframes errorShake {
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    75% {
+        transform: translateX(-3px);
+    }
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+
+    margin-top: 18px;
+
+    color: #435268;
+
+    text-align: center;
+
+    font-family: 'JetBrains Mono', monospace;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .main {
+        grid-template-columns: 1fr;
+    }
+
+    .command-panel {
+        min-height: 650px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .app {
+        width: calc(100% - 22px);
+
+        padding-top: 15px;
+    }
+
+    header {
+        height: auto;
+
+        padding-bottom: 15px;
+
+        gap: 12px;
+    }
+
+    .system {
+        display: none;
+    }
+
+    .row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-panel,
+    .command-panel {
+        padding: 20px;
+    }
+
+    .eta-number {
+        font-size: 50px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ======================================================
+     BACKGROUND
+======================================================= -->
+
+<div class="background-grid"></div>
+
+<div class="particle p1"></div>
+<div class="particle p2"></div>
+<div class="particle p3"></div>
+<div class="particle p4"></div>
+<div class="particle p5"></div>
+
+
+<div class="app">
+
+
+<!-- ======================================================
+     HEADER
+======================================================= -->
+
+<header>
+
+    <div class="logo-area">
+
+        <div class="logo">
+            ETA
+        </div>
+
+        <div class="title">
+
+            <h1>
+                Neural Delivery
+            </h1>
+
+            <p>
+                AI POWERED DELIVERY TIME PREDICTION
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="system">
+
+        <span class="system-dot"></span>
+
+        SYSTEM ONLINE
+
+    </div>
+
+</header>
+
+
+
+<!-- ======================================================
+     MAIN
+======================================================= -->
+
+<div class="main">
+
+
+<!-- ======================================================
+     INPUT PANEL
+======================================================= -->
+
+<div class="card form-panel">
+
+    <div class="panel-heading">
+
+        <span class="panel-title">
+            Order parameters
+        </span>
+
+        <span class="panel-number">
+            INPUT / 12
+        </span>
+
+    </div>
+
+
+<form method="POST" id="predictionForm">
+
+
+<!-- MARKET + PROTOCOL -->
+
+<div class="row">
+
+    <div class="field">
+
+        <label>
+            Market ID
+            <span>01</span>
+        </label>
+
+        <div class="input-wrap">
+
+            <input
+                type="number"
+                step="1"
+                name="market_id"
+                value="{{ request.form.get('market_id', 2) }}"
+                required
+            >
+
+        </div>
+
+        <div class="reaction">
+            MARKET NODE IDENTIFIED
+        </div>
+
+    </div>
+
+
+    <div class="field">
+
+        <label>
+            Order protocol
+            <span>02</span>
+        </label>
+
+        <div class="input-wrap">
+
+            <input
+                type="number"
+                step="1"
+                name="order_protocol"
+                value="{{ request.form.get('order_protocol', 1) }}"
+                required
+            >
+
+        </div>
+
+        <div class="reaction">
+            PROTOCOL VALIDATED
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- STORE CATEGORY -->
+
+<div class="field">
+
+    <label>
+        Store category
+        <span>03</span>
+    </label>
+
+    <div class="input-wrap">
+
+        <select name="store_category">
+
+            {% for cat in categories %}
+
+            <option
+                value="{{ cat }}"
+                {% if request.form.get('store_category') == cat %}
+                selected
+                {% endif %}
+            >
+
+                {{ cat }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <div class="reaction">
+        CATEGORY PROFILE LOADED
+    </div>
+
+</div>
+
+
+
+<!-- ORDER TIME -->
+
+<div class="field">
+
+    <label>
+        Order placed at
+        <span>04</span>
+    </label>
+
+    <div class="input-wrap">
+
+        <input
+            type="datetime-local"
+            name="order_time"
+            value="{{ request.form.get('order_time', '') }}"
+            step="60"
+            required
+        >
+
+    </div>
+
+    <div class="reaction">
+        TEMPORAL DATA SYNCHRONIZED
+    </div>
+
+</div>
+
+
+
+<!-- ITEMS -->
+
+<div class="row">
+
+    <div class="field">
+
+        <label>
+            Total items
+            <span>05</span>
+        </label>
+
+        <div class="input-wrap">
+
+            <input
+                type="number"
+                step="1"
+                name="total_items"
+                value="{{ request.form.get('total_items', 3) }}"
+                required
+            >
+
+        </div>
+
+        <div class="reaction">
+            ITEM LOAD CALCULATED
+        </div>
+
+    </div>
+
+
+    <div class="field">
+
+        <label>
+            Distinct items
+            <span>06</span>
+        </label>
+
+        <div class="input-wrap">
+
+            <input
+                type="number"
+                step="1"
+                name="num_distinct_items"
+                value="{{ request.form.get('num_distinct_items', 3) }}"
+                required
+            >
+
+        </div>
+
+        <div class="reaction">
+            VARIETY ANALYZED
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- PRICES -->
+
+<div class="row">
+
+    <div class="field">
+
+        <label>
+            Subtotal (cents)
+            <span>07</span>
+        </label>
+
+        <div class="input-wrap">
+
+            <input
+                type="number"
+                step="1"
+                name="subtotal"
+                value="{{ request.form.get('subtotal', 2500) }}"
+                required
+            >
+
+        </div>
+
+        <div class="reaction">
+            ORDER VALUE ANALYZED
+        </div>
+
+    </div>
+
+
+    <div class="field">
+
+        <label>
+            Min item price
+            <span>08</span>
+        </label>
+
+        <div class="input-wrap">
+
+            <input
+                type="number"
+                step="1"
+                name="min_item_price"
+                value="{{ request.form.get('min_item_price', 500) }}"
+                required
+            >
+
+        </div>
+
+        <div class="reaction">
+            PRICE RANGE SCANNED
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- MAX PRICE -->
+
+<div class="field">
+
+    <label>
+        Max item price
+        <span>09</span>
+    </label>
+
+    <div class="input-wrap">
+
+        <input
+            type="number"
+            step="1"
+            name="max_item_price"
+            value="{{ request.form.get('max_item_price', 1200) }}"
+            required
+        >
+
+    </div>
+
+    <div class="reaction">
+        UPPER PRICE BOUND REGISTERED
+    </div>
+
+</div>
+
+
+
+<!-- PARTNERS -->
+
+<div class="row">
+
+    <div class="field">
+
+        <label>
+            Partners on shift
+            <span>10</span>
+        </label>
+
+        <div class="input-wrap">
+
+            <input
+                type="number"
+                step="1"
+                name="total_onshift_partners"
+                value="{{ request.form.get('total_onshift_partners', 20) }}"
+                required
+            >
+
+        </div>
+
+        <div class="reaction">
+            FLEET CAPACITY DETECTED
+        </div>
+
+    </div>
+
+
+    <div class="field">
+
+        <label>
+            Partners busy
+            <span>11</span>
+        </label>
+
+        <div class="input-wrap">
+
+            <input
+                type="number"
+                step="1"
+                name="total_busy_partners"
+                value="{{ request.form.get('total_busy_partners', 12) }}"
+                required
+            >
+
+        </div>
+
+        <div class="reaction">
+            ACTIVE LOAD UPDATED
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- OUTSTANDING ORDERS -->
+
+<div class="field">
+
+    <label>
+        Outstanding orders
+        <span>12</span>
+    </label>
+
+    <div class="input-wrap">
+
+        <input
+            type="number"
+            step="1"
+            name="total_outstanding_orders"
+            value="{{ request.form.get('total_outstanding_orders', 15) }}"
+            required
+        >
+
+    </div>
+
+    <div class="reaction">
+        QUEUE PRESSURE UPDATED
+    </div>
+
+</div>
+
+
+
+<!-- PREDICT -->
+
+<button
+    type="submit"
+    class="predict-button"
+    id="predictButton"
+>
+
+    RUN NEURAL PREDICTION
+
+</button>
+
+
+</form>
+
+</div>
+
+
+
+<!-- ======================================================
+     AI COMMAND PANEL
+======================================================= -->
+
+<div class="card command-panel">
+
+
+<div class="command-top">
+
+    <div class="command-title">
+        Neural command center
+    </div>
+
+    <div class="ai-mode">
+
+        <span></span>
+
+        AI ACTIVE
+
+    </div>
+
+</div>
+
+
+
+<!-- ======================================================
+     ROBOT
+======================================================= -->
+
+<div class="ai-area">
+
+    <div class="scanner"></div>
+
+
+    <div class="robot">
+
+        <div class="robot-glow"></div>
+
+
+        <div class="robot-ear left"></div>
+        <div class="robot-ear right"></div>
+
+
+        <div class="robot-head">
+
+            <div class="robot-face">
+
+                <div class="eye left"></div>
+                <div class="eye right"></div>
+
+                <div class="thinking-dots">
+
+                    <i></i>
+                    <i></i>
+                    <i></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="robot-body">
+
+            <div class="robot-core"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ======================================================
+     AI STATUS
+======================================================= -->
+
+<div class="ai-thinking">
+
+    <div
+        class="ai-state"
+        id="aiState"
+    >
+        NEURAL NETWORK READY
+    </div>
+
+    <div
+        class="ai-description"
+        id="aiDescription"
+    >
+        All systems operational.<br>
+        Waiting for prediction request.
+    </div>
+
+</div>
+
+
+
+<!-- ======================================================
+     DELIVERY MAP
+======================================================= -->
+
+<div class="map">
+
+    <div class="road1"></div>
+    <div class="road2"></div>
+    <div class="road3"></div>
+
+
+    <div class="route"></div>
+
+
+    <div class="map-point start"></div>
+
+    <div class="map-point end"></div>
+
+
+    <!-- DELIVERY VEHICLE -->
+
+    <div class="delivery-car">
+
+        <div class="car-body"></div>
+
+        <div class="car-cabin">
+
+            <div class="car-window"></div>
+
+        </div>
+
+        <div class="car-wheel one"></div>
+
+        <div class="car-wheel two"></div>
+
+    </div>
+
+
+    {% if prediction is not none %}
+
+    <div class="eta-result visible">
+
+        <div class="eta-number">
+            {{ prediction }}
+        </div>
+
+        <div class="eta-minutes">
+            MINUTES ETA
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+
+<!-- ======================================================
+     METRICS
+======================================================= -->
+
+<div class="metrics">
+
+    <div class="metric">
+
+        <span class="metric-label">
+            Model
+        </span>
+
+        <span class="metric-value">
+            Keras NN
+        </span>
+
+    </div>
+
+
+    <div class="metric">
+
+        <span class="metric-label">
+            Engine
+        </span>
+
+        <span class="metric-value">
+            Regression
+        </span>
+
+    </div>
+
+
+    <div class="metric">
+
+        <span class="metric-label">
+            Status
+        </span>
+
+        <span class="metric-value">
+            Ready
+        </span>
+
+    </div>
+
+</div>
+
+
+
+{% if error %}
+
+<div class="error">
+
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+
+</div>
+
+</div>
+
+
+
+<footer>
+
+    PORTER DELIVERY-TIME ESTIMATOR
+    &nbsp;•&nbsp;
+    NEURAL NETWORK REGRESSION
+    &nbsp;•&nbsp;
+    ETA·NET
+
+</footer>
+
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   FIELD INTERACTION SYSTEM
+========================================================= */
+
+const fields =
+    document.querySelectorAll(".field");
+
+const aiState =
+    document.getElementById("aiState");
+
+const aiDescription =
+    document.getElementById("aiDescription");
+
+
+const reactions = {
+
+    market_id:
+        "MARKET NODE IDENTIFIED",
+
+    order_protocol:
+        "PROTOCOL VALIDATED",
+
+    store_category:
+        "CATEGORY PROFILE LOADED",
+
+    order_time:
+        "TEMPORAL DATA SYNCHRONIZED",
+
+    total_items:
+        "ITEM LOAD CALCULATED",
+
+    num_distinct_items:
+        "VARIETY ANALYZED",
+
+    subtotal:
+        "ORDER VALUE ANALYZED",
+
+    min_item_price:
+        "PRICE RANGE SCANNED",
+
+    max_item_price:
+        "UPPER PRICE BOUND REGISTERED",
+
+    total_onshift_partners:
+        "FLEET CAPACITY DETECTED",
+
+    total_busy_partners:
+        "ACTIVE LOAD UPDATED",
+
+    total_outstanding_orders:
+        "QUEUE PRESSURE UPDATED"
+};
+
+
+function activateField(field) {
+
+    fields.forEach(f => {
+
+        f.classList.remove("active");
+
+    });
+
+
+    field.classList.add("active");
+
+
+    const input =
+        field.querySelector("input, select");
+
+
+    const reaction =
+        field.querySelector(".reaction");
+
+
+    if (input && reaction) {
+
+        reaction.textContent =
+            reactions[input.name] ||
+            "DATA REGISTERED";
+
+    }
+
+
+    if (
+        aiState &&
+        aiDescription &&
+        !document.body.classList.contains("calculating")
+    ) {
+
+        aiState.textContent =
+            "ANALYZING " +
+            input.name
+                .replaceAll("_", " ")
+                .toUpperCase();
+
+
+        aiDescription.innerHTML =
+            "Neural network processing input...<br>" +
+            "Updating delivery-time model.";
+
+    }
+
+}
+
+
+/* =========================================================
+   EVERY INPUT REACTS
+========================================================= */
+
+fields.forEach(field => {
+
+    const input =
+        field.querySelector("input, select");
+
+
+    if (!input) return;
+
+
+    input.addEventListener("focus", () => {
+
+        activateField(field);
+
+    });
+
+
+    input.addEventListener("input", () => {
+
+        activateField(field);
+
+    });
+
+
+    input.addEventListener("change", () => {
+
+        activateField(field);
+
+    });
+
+});
+
+
+/* =========================================================
+   AI READY STATE
+========================================================= */
+
+setTimeout(() => {
+
+    if (
+        aiState &&
+        !document.body.classList.contains("calculating")
+    ) {
+
+        aiState.textContent =
+            "NEURAL NETWORK READY";
+
+        aiDescription.innerHTML =
+            "All systems operational.<br>" +
+            "Waiting for prediction request.";
+
+    }
+
+}, 1800);
+
+
+/* =========================================================
+   FORM SUBMISSION
+   2.5 SECOND AI CALCULATION SIMULATION
+========================================================= */
+
+const form =
+    document.getElementById("predictionForm");
+
+const button =
+    document.getElementById("predictButton");
+
+
+if (form) {
+
+    form.addEventListener("submit", function(event) {
+
+        /*
+         * Stop the form from submitting immediately.
+         *
+         * This gives the AI interface time to simulate
+         * the calculation process.
+         */
+
+        event.preventDefault();
+
+
+        /* =============================================
+           ENTER CALCULATION MODE
+        ============================================= */
+
+        document.body.classList.add("calculating");
+
+
+        /* =============================================
+           BUTTON
+        ============================================= */
+
+        button.textContent =
+            "◌  AI CALCULATING...";
+
+        button.style.pointerEvents =
+            "none";
+
+
+        /* =============================================
+           STEP 1
+        ============================================= */
+
+        aiState.textContent =
+            "THINKING...";
+
+        aiDescription.innerHTML =
+            "Analyzing order parameters...<br>" +
+            "Initializing neural network.";
+
+
+        /* =============================================
+           STEP 2 — 0.7 SEC
+        ============================================= */
+
+        setTimeout(() => {
+
+            aiState.textContent =
+                "ANALYZING FLEET LOAD";
+
+            aiDescription.innerHTML =
+                "Checking available delivery partners...<br>" +
+                "Calculating current queue pressure.";
+
+        }, 700);
+
+
+        /* =============================================
+           STEP 3 — 1.3 SEC
+        ============================================= */
+
+        setTimeout(() => {
+
+            aiState.textContent =
+                "PROCESSING ORDER";
+
+            aiDescription.innerHTML =
+                "Evaluating order complexity...<br>" +
+                "Analyzing item count and pricing.";
+
+        }, 1300);
+
+
+        /* =============================================
+           STEP 4 — 1.9 SEC
+        ============================================= */
+
+        setTimeout(() => {
+
+            aiState.textContent =
+                "PREDICTING ETA";
+
+            aiDescription.innerHTML =
+                "Running neural regression model...<br>" +
+                "Generating delivery-time estimate.";
+
+        }, 1900);
+
+
+        /* =============================================
+           STEP 5 — 2.5 SEC
+        ============================================= */
+
+        setTimeout(() => {
+
+            aiState.textContent =
+                "PREDICTION COMPLETE";
+
+            aiDescription.innerHTML =
+                "Neural network calculation finished.<br>" +
+                "Loading estimated delivery time.";
+
+
+            button.textContent =
+                "✓  PREDICTION COMPLETE";
+
+
+            /*
+             * Submit the ORIGINAL form to Flask.
+             *
+             * This preserves your existing backend.
+             */
+
+            HTMLFormElement
+                .prototype
+                .submit
+                .call(form);
+
+        }, 2500);
+
+    });
+
+}
+
+
+/* =========================================================
+   NUMBER INPUT VISUAL REACTION
+========================================================= */
+
+document
+    .querySelectorAll('input[type="number"]')
+    .forEach(input => {
+
+        input.addEventListener("input", () => {
+
+            if (input.value !== "") {
+
+                input.style.borderColor =
+                    "rgba(66,232,255,.65)";
+
+            }
+
+        });
+
+
+        input.addEventListener("blur", () => {
+
+            input.style.borderColor = "";
+
+        });
+
+    });
+
+
+/* =========================================================
+   ETA RESULT REVEAL
+========================================================= */
+
+const etaResult =
+    document.querySelector(".eta-result");
+
+
+if (etaResult) {
+
+    /*
+     * Slight delay after Flask renders the page,
+     * giving the result a cinematic entrance.
+     */
+
+    etaResult.classList.remove("visible");
+
+
+    setTimeout(() => {
+
+        etaResult.classList.add("visible");
+
+    }, 250);
+
+}
+
+</script>
+
+
+</body>
+</html>

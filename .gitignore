@@ -1,0 +1,47 @@
+# Environment
+.venv/
+venv/
+ENV/
+env/
+*.pyc
+__pycache__/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Model and data
+*.keras
+*.pkl
+model_backup_*/
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Dependencies
+.installed.cfg
+*.egg-info/
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Node modules (if using npm packages)
+node_modules/
+package-lock.json
